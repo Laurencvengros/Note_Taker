@@ -13,26 +13,26 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
-const writeToFile = (destination, noteContent) =>
-fs.writeFile(destination, JSON.stringify(noteContent), (err) =>{
-    if (err){
-        console.error(err)
-    } else {
-        console.info(`\nData written to ${destination}`)
-    }
-})
+// const writeToFile = (destination, noteContent) =>
+// fs.writeFile(destination, JSON.stringify(noteContent), (err) =>{
+//     if (err){
+//         console.error(err)
+//     } else {
+//         console.info(`\nData written to ${destination}`)
+//     }
+// })
 
-const readAndAppend = (noteContent, file) =>{
-    fs.readFile(file, 'utf8', (err, data) =>{
-        if(err){
-            console.error(err);
-        } else{
-            const noteData = JSON.parse(data);
-            noteData.push(noteContent);
-            writeToFile(file, noteData);
-        }
-    });
-};
+// const readAndAppend = (noteContent, file) =>{
+//     fs.readFile(file, 'utf8', (err, data) =>{
+//         if(err){
+//             console.error(err);
+//         } else{
+//             const noteData = JSON.parse(data);
+//             noteData.push(noteContent);
+//             writeToFile(file, noteData);
+//         }
+//     });
+// };
 
 //route for index.html
 app.get('*', (req, res) => {
