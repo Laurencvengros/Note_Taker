@@ -34,15 +34,6 @@ const readAndAppend = (noteContent, file) =>{
     });
 };
 
-//route for index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/index.html'))
-});
-
-//route for notes page
-app.get("/notes",(req, res) => {
-    res.sendFile(path.join(__dirname, "./public/notes.html"));
-});
 
 app.get("/api/notes", (req, res) => {
     fs.readFile(path.join(__dirname, "./db/db.json"),"utf8", (error,notes) => {
@@ -71,6 +62,17 @@ app.post("/api/notes", (req, res) =>{
         res.error("error adding note");
     }
 });
+
+//route for index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'))
+  });
+  
+  //route for notes page
+  app.get("/notes",(req, res) => {
+      res.sendFile(path.join(__dirname, "./public/notes.html"));
+  });
+  
 
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} 🚀`)
