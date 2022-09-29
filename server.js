@@ -13,27 +13,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
-const writeToFile = (destination, noteContent) =>
-    fs.writeFile(destination, JSON.stringify(noteContent), (err) => {
-        if (err) {
-            console.error(err)
-        } else {
-            console.info(`\nData written to ${destination}`)
-        }
-    })
-
-const readAndAppend = (noteContent, file) => {
-    fs.readFile(file, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-        } else {
-            const noteData = JSON.parse(data);
-            noteData.push(noteContent);
-            writeToFile(file, noteData);
-        }
-    });
-};
-
 
 app.get("/api/notes", (req, res) => {
     fs.readFile(path.join(__dirname, "./db/db.json"), "utf8", (error, notes) => {
@@ -47,29 +26,26 @@ app.get("/api/notes", (req, res) => {
 
 app.post("/api/notes", (req, res) => {
 
-    const { date, title, text } = req.body
-
-    if (req.body) {
-        const newNote = {
-            date,
-            title,
-            text,
-        };
-
-        readAndAppend(newNote, "./db/db.json");
-        res.json(newNote.title + " has beed added");
-    } else {
-        res.error("error adding note");
-    }
+    const notes = JSON.parse(fs.readFileSync("./db/db.json"));
+    const newNotes = req.body;
+    newNotes.id = notes.length + 1;
+    notes.push(newNotes);
+    fs.writeFileSync("./db/db.json", JSON.stringify(notes))
+    res.json(notes);
 });
+
+//app.delete("/api/notes/:id", function(req,res){
+
 
 //route for notes page
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/notes.html"));
 });
 
+
+
 //route for index.html
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, './public/index.html'))
 });
 
