@@ -34,7 +34,39 @@ app.post("/api/notes", (req, res) => {
     res.json(notes);
 });
 
-//app.delete("/api/notes/:id", function(req,res){
+
+app.delete('/api/notes/:id', function(req, res) {
+    
+    const deleteNote = req.params.id;
+
+    fs.readFile('./db/db.json', (err, data) => {
+      if (err) throw err;
+
+      
+      noteData = JSON.parse(data);
+      
+      for (let i = 0; i < noteData.length; i++) {
+        if (noteData[i].id === Number(deleteNote)) {
+          noteData.splice([i], 1);
+        }
+      }
+      
+      stringData = JSON.stringify(noteData);
+
+      fs.writeFile('./db/db.json', stringData, (err, data) => {
+        if (err) {
+            console.log("err deleting note")
+        }else{
+            res.json(data)
+            console.log("note deleted!")
+        }
+      });
+      
+    });
+});
+    
+   
+  
 
 
 //route for notes page
@@ -53,5 +85,4 @@ app.get('/', (req, res) => {
 
 
 app.listen(PORT, () =>
-    console.log(`App listening at http://localhost:${PORT} 🚀`)
-);
+    console.log(`App listening at http://localhost:${PORT} 🚀`));
