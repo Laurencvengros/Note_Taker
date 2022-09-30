@@ -21,6 +21,7 @@ app.get("/api/notes", (req, res) => {
         }
 
         res.json(JSON.parse(notes))
+        
     })
 });
 
@@ -35,8 +36,13 @@ app.post("/api/notes", (req, res) => {
     }
     
     notes.push(newNotes);
-    fs.writeFileSync("./db/db.json", JSON.stringify(notes))
+    fs.writeFileSync("./db/db.json", JSON.stringify(notes), (err) =>{
+        if(err){
+            console.log("err adding note!")
+        }
+    })
     res.json(notes);
+    console.log("new note added!")
 });
 
 
@@ -52,25 +58,25 @@ app.delete('/api/notes/:id', function(req, res) {
       noteData = JSON.parse(data);
       
       for (let i = 0; i < noteData.length; i++) {
-        if (noteData[i].id === Number(deleteNote)) {
+        if (noteData[i].id == deleteNote) {
           noteData.splice([i], 1);
         }
       }
       
-      stringData = JSON.stringify(noteData);
+      newNoteData = JSON.stringify(noteData);
 
-      fs.writeFile('./db/db.json', stringData, (err, data) => {
+      fs.writeFile('./db/db.json', newNoteData, (err, data) => {
         if (err) {
-            console.log("err deleting note")
+            console.log("error deleting note")
         }else{
             res.json(data)
-            console.log("note deleted!")
+            console.log(`note ${deleteNote} deleted!`)
         }
       });
       
     });
 });
-  
+
 
 
 //route for notes page
