@@ -40,6 +40,7 @@ app.post("/api/notes", (req, res) => {
 });
 
 
+
 app.delete('/api/notes/:id', function(req, res) {
     
     const deleteNote = req.params.id;
@@ -52,7 +53,7 @@ app.delete('/api/notes/:id', function(req, res) {
       
       for (let i = 0; i < noteData.length; i++) {
         if (noteData[i].id === Number(deleteNote)) {
-          noteData.splice([i], 2);
+          noteData.splice([i], 1);
         }
       }
       
