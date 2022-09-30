@@ -28,7 +28,12 @@ app.post("/api/notes", (req, res) => {
 
     const notes = JSON.parse(fs.readFileSync("./db/db.json"));
     const newNotes = req.body;
-    newNotes.id = notes.length + 1;
+    if(notes.length === 0){
+        newNotes.id = 1
+    }else{
+        newNotes.id = notes.length + 1;
+    }
+    
     notes.push(newNotes);
     fs.writeFileSync("./db/db.json", JSON.stringify(notes))
     res.json(notes);
@@ -47,7 +52,7 @@ app.delete('/api/notes/:id', function(req, res) {
       
       for (let i = 0; i < noteData.length; i++) {
         if (noteData[i].id === Number(deleteNote)) {
-          noteData.splice([i], 1);
+          noteData.splice([i], 2);
         }
       }
       
@@ -64,8 +69,6 @@ app.delete('/api/notes/:id', function(req, res) {
       
     });
 });
-    
-   
   
 
 
